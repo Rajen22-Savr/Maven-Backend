@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: maven-backend
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn maven_api_backend:app --host 0.0.0.0 --port 10000"
+    plan: free
