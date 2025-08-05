@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import pandas as pd
 from io import BytesIO
+from insight_engine import run_all_insights
 
 app = FastAPI()
 app.add_middleware(
@@ -15,6 +16,7 @@ app.add_middleware(
 
 class InsightResponse(BaseModel):
     top_suppliers: list
+    dynamic_insights: list
     outliers: list
     actions: list
 
@@ -30,4 +32,6 @@ async def upload_file(file: UploadFile = File(...)):
         {"type": "Consolidate Tail Spend", "note": "3+ suppliers under $10K spend"},
         {"type": "Rationalize Overlapping Materials", "note": "Multiple suppliers provide similar materials"}
     ]
+        dynamic_insights = run_all_insights(df)
+
     return InsightResponse(top_suppliers=top_suppliers, outliers=outliers, actions=actions)
